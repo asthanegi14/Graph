@@ -1,0 +1,59 @@
+import java.util.*;
+
+class GraphTr {
+    int v;
+    ArrayList<ArrayList<Integer>> graph;
+    ArrayList<Integer> finalArr;
+
+    GraphTr(int node) {
+        v = node;
+        graph = new ArrayList<ArrayList<Integer>>();
+        for (int i = 0; i < v; i++) {
+            graph.add(new ArrayList<Integer>());
+        }
+    }
+
+    void addEdge(int V, int U) {
+        graph.get(V).add(U);
+        graph.get(U).add(V);
+    }
+
+    ArrayList<Integer> bfs() {
+        finalArr = new ArrayList<Integer>();
+        boolean vis[] = new boolean[v + 1];
+        for (int i = 1; i < v; i++) {
+            if (vis[i] == false) {
+                Queue<Integer> q = new LinkedList<Integer>();
+                q.add(i);
+                vis[i] = true;
+                while (!q.isEmpty()) {
+                    int node = q.poll();
+                    finalArr.add(node);
+                    for (int j : graph.get(node)) {
+                        if (!vis[j]) {
+                            q.add(j);
+                            vis[j] = true;
+                        }
+                    }
+                }
+            }
+        }
+        return finalArr;
+    }
+}
+    public class GraphTraversalBfs {
+        public static void main(String arg[]) {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("enter total number of nodes");
+            int node = sc.nextInt();
+            GraphTr g = new GraphTr(node);
+            System.out.println("enter values for V and U");
+            for (int i = 0; i < node + 1; i++) {
+                int v = sc.nextInt();
+                int u = sc.nextInt();
+                g.addEdge(v, u);
+            }
+            System.out.println("Bfs of these inputs = ");
+            System.out.println(g.bfs());
+        }
+    }
