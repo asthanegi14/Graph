@@ -1,0 +1,74 @@
+import java.util.*;
+class Node{
+    int data;
+    int parent;
+    public Node(int data, int parent)
+    {
+        this.data=data;
+        this.parent=parent;
+    }
+}
+public class FindingCycleInGraph {
+    ArrayList<ArrayList<Integer>> adj;
+    static boolean searchIfCycle(int nodes, boolean vis[],ArrayList<ArrayList<Integer>> adj)
+    {
+        Queue<Node> q = new LinkedList<>();
+        q.add(new Node(nodes,-1));
+        vis[nodes]=true;
+       while(!q.isEmpty())
+        {
+            int fir = q.peek().data;
+            int sec = q.peek().parent;
+            for(int k:adj.get(nodes)) {
+                if (!vis[k]) {
+                    q.add(new Node(k,nodes));
+                    vis[k]=true;
+                }
+                else if(sec!=k)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    static boolean cycle(int node,ArrayList<ArrayList<Integer>> adj)
+    {
+        boolean vis[]=new boolean[node];
+        for(int i=0;i<node;i++)
+        {
+            if(!vis[i]){
+                searchIfCycle(i,vis,adj);
+                return true;
+            }
+        }
+           return false;
+    }
+    public static void main(String arg[])
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("enter total number of nodes");
+        int node = sc.nextInt();
+        FindingCycleInGraph g = new FindingCycleInGraph();
+        g.adj = new ArrayList<ArrayList<Integer>>();
+        for(int i=0;i<node;i++)
+        {
+            g.adj.add(new ArrayList<>());
+        }
+        System.out.println("enter V and U");
+        for(int i=0;i<node-1;i++)
+        {
+               int v = sc.nextInt();
+               int u = sc.nextInt();
+               g.adj.get(v).add(u);
+               g.adj.get(u).add(v);
+        }
+        boolean ans = cycle(node,g.adj);
+        if(ans==true)
+        {
+            System.out.println("yes there is a cycle in this graph");
+        }
+        else
+            System.out.println("no there is no cycle in this graph");
+    }
+}
